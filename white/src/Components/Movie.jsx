@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import {getMovies} from '../services/fakeMovieService';
 import Like from '../Components/Like';
+import Pagination from '../Components/Pagination';
+import _ from 'lodash';
 class Movies extends Component {
     state = { 
-        movies:getMovies()
+        movies:getMovies(),
+        pageSize:4,
+        currentPage:1,
      }
 
      handleClick=(Movie)=>{
@@ -11,6 +15,17 @@ class Movies extends Component {
          this.setState({ movies })
      }
     
+     handlePage=(Page)=>{
+         this.setState({currentPage:Page})
+     }
+
+     handlePaginate=(Page)=>{
+        let end=Page*this.state.pageSize; 
+        let start=end-this.state.pageSize;
+        return _.slice(this.state.movies,start,end)
+         
+     }
+
      handleLike=(movie)=>{
         const movies=[...this.state.movies];
         const index= movies.indexOf(movie);
@@ -22,6 +37,7 @@ class Movies extends Component {
        
      }
     render() { 
+        const K=this.handlePaginate(this.state.currentPage);
         return ( 
             <React.Fragment>
                     <h3>No of Movies : {this.state.movies.length}</h3>
@@ -39,7 +55,7 @@ class Movies extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.movies.map(movie=>(<tr  key={movie._id}>
+                            {K.map(movie=>(<tr  key={movie._id}>
                                 <td>{movie._id}</td>
                                 <td>{movie.title}</td>
                                 <td>{movie.genre.name}</td>
@@ -51,6 +67,7 @@ class Movies extends Component {
                             ))}
                         </tbody>
                     </table>
+                    <Pagination changePage={this.handlePage}currentPage={this.state.currentPage} totalItems={this.state.movies.length} pageSize={this.state.pageSize}/>
                 </main>
             </React.Fragment>
          );

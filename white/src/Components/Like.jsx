@@ -1,8 +1,10 @@
 import React from 'react';
 const Like = (props) => {
-    return ( <React.Fragment>
-        <span onClick={()=>props.handleLike(props.Movie)} style={{cursor:"pointer"}}>{props.Movie.liked==="true" ? <i className="fa fa-heart"/> : <i className="fa fa-heart-o"/>}</span>
-    </React.Fragment> );
+    return ( <i
+        className={props.Movie.liked ? "fa fa-heart" : "fa fa-heart-o"}
+        aria-hidden="true"
+        onClick={() => props.handleLike(props.Movie)}
+      ></i>);
 }
  
 export default Like;
