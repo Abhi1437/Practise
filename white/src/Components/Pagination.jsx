@@ -6,15 +6,17 @@ const Pagination = (props) => {
     const Pages=_.range(1,totalPages+1);
     if(totalPages===1) return null
     return (
-
+        
     <h4>
+        
         <nav aria-label="Page navigation">
     <ul className="pagination">
         {Pages.map(Page=>(
         <li key={Page} className={Page===currentPage ? 'page-item active':'page-item'}>
-            <button className="page-link" onClick={()=>props.changePage(Page)}>{Page}</button></li>))}
+            <button className="page-link" onClick={()=>props.changePage(Page)}>{Page}</button ></li>))}
       
     </ul>
+    {console.log(props.currentPage)}
   </nav></h4> );
 }
  

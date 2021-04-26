@@ -3,16 +3,23 @@ import {getMovies} from '../services/fakeMovieService';
 import Like from '../Components/Like';
 import Pagination from '../Components/Pagination';
 import _ from 'lodash';
+import ListGenre from './ListGenre';
+import { getGenres } from '../services/fakeGenreService';
 class Movies extends Component {
     state = { 
         movies:getMovies(),
         pageSize:4,
         currentPage:1,
+        selectedGenre:{name:"All Genres"},
+        genre:getGenres(),
+        movieList:getMovies()
      }
 
+     
+//Delete
      handleClick=(Movie)=>{
-         let movies= this.state.movies.filter(Mov=>Mov._id!==Movie._id)
-         this.setState({ movies })
+         let movies= this.state.movieList.filter(Mov=>Mov._id!==Movie._id)
+         this.setState({ movieList:movies })
      }
     
      handlePage=(Page)=>{
@@ -22,9 +29,17 @@ class Movies extends Component {
      handlePaginate=(Page)=>{
         let end=Page*this.state.pageSize; 
         let start=end-this.state.pageSize;
-        return _.slice(this.state.movies,start,end)
+        return _.slice(this.state.movieList,start,end)
          
      }
+
+     HandleGenre=(genre)=>{
+         const M= this.state.selectedGenre.type==="AA" ? this.state.movies: this.state.movies.filter(movie=>movie.genre._id===genre._id) ;
+         
+         this.setState({movieList:M,currentPage:1,selectedGenre:genre })
+        
+     }
+
 
      handleLike=(movie)=>{
         const movies=[...this.state.movies];
@@ -38,9 +53,15 @@ class Movies extends Component {
      }
     render() { 
         const K=this.handlePaginate(this.state.currentPage);
+        const Gen=[{_id:"abc",name:"All Genres", type:"AA"},...getGenres()];
         return ( 
-            <React.Fragment>
-                    <h3>No of Movies : {this.state.movies.length}</h3>
+            <div>
+                <div className="row">
+                <div className="col-2">
+                    <h4><ListGenre types={Gen} selectedGenre={this.state.selectedGenre} onHandleGenre={this.HandleGenre} /></h4>
+                </div>
+                <div className="col">
+                <h3>No of Movies : {this.state.movieList.length}</h3>
                 <main>
                     <table className="table ">
                         <thead>
@@ -67,9 +88,11 @@ class Movies extends Component {
                             ))}
                         </tbody>
                     </table>
-                    <Pagination changePage={this.handlePage}currentPage={this.state.currentPage} totalItems={this.state.movies.length} pageSize={this.state.pageSize}/>
-                </main>
-            </React.Fragment>
+                    <Pagination changePage={this.handlePage} currentPage={this.state.currentPage} totalItems={this.state.movieList.length} pageSize={this.state.pageSize}/>
+                </main></div>
+                </div>
+                    
+            </div>
          );
     }
 }
