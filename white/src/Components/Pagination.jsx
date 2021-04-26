@@ -16,7 +16,6 @@ const Pagination = (props) => {
             <button className="page-link" onClick={()=>props.changePage(Page)}>{Page}</button ></li>))}
       
     </ul>
-    {console.log(props.currentPage)}
   </nav></h4> );
 }
  

@@ -4,40 +4,37 @@ import Like from '../Components/Like';
 import Pagination from '../Components/Pagination';
 import _ from 'lodash';
 import ListGenre from './ListGenre';
-import { getGenres } from '../services/fakeGenreService';
+import {  getGenres } from '../services/fakeGenreService';
 class Movies extends Component {
     state = { 
         movies:getMovies(),
         pageSize:4,
+        selectedGenre:"",
         currentPage:1,
-        selectedGenre:{name:"All Genres"},
-        genre:getGenres(),
-        movieList:getMovies()
+        genre:[{_id:"12",name:"All Genres", type:"AA"},...getGenres()],
+        
      }
 
      
 //Delete
      handleClick=(Movie)=>{
-         let movies= this.state.movieList.filter(Mov=>Mov._id!==Movie._id)
-         this.setState({ movieList:movies })
+         let movies= this.state.movies.filter(Mov=>Mov._id!==Movie._id)
+         this.setState({ movies })
      }
     
      handlePage=(Page)=>{
          this.setState({currentPage:Page})
      }
 
-     handlePaginate=(Page)=>{
+     handlePaginate=(Page,filtered)=>{
         let end=Page*this.state.pageSize; 
         let start=end-this.state.pageSize;
-        return _.slice(this.state.movieList,start,end)
+        return _.slice(filtered,start,end)
          
      }
 
      HandleGenre=(genre)=>{
-         const M= this.state.selectedGenre.type==="AA" ? this.state.movies: this.state.movies.filter(movie=>movie.genre._id===genre._id) ;
-         
-         this.setState({movieList:M,currentPage:1,selectedGenre:genre })
-        
+         this.setState({currentPage:1,selectedGenre:genre })
      }
 
 
@@ -52,16 +49,17 @@ class Movies extends Component {
        
      }
     render() { 
-        const K=this.handlePaginate(this.state.currentPage);
-        const Gen=[{_id:"abc",name:"All Genres", type:"AA"},...getGenres()];
+        const filter=this.state.selectedGenre && !this.state.selectedGenre.type ? this.state.movies.filter(movie=>movie.genre._id===this.state.selectedGenre._id) :this.state.movies ;
+        const K=this.handlePaginate(this.state.currentPage,filter);
+
         return ( 
             <div>
                 <div className="row">
                 <div className="col-2">
-                    <h4><ListGenre types={Gen} selectedGenre={this.state.selectedGenre} onHandleGenre={this.HandleGenre} /></h4>
+                    <h4><ListGenre types={this.state.genre} selectedGenre={this.state.selectedGenre} onHandleGenre={this.HandleGenre} /></h4>
                 </div>
                 <div className="col">
-                <h3>No of Movies : {this.state.movieList.length}</h3>
+                <h3>No of Movies : {filter.length}</h3>
                 <main>
                     <table className="table ">
                         <thead>
@@ -88,7 +86,7 @@ class Movies extends Component {
                             ))}
                         </tbody>
                     </table>
-                    <Pagination changePage={this.handlePage} currentPage={this.state.currentPage} totalItems={this.state.movieList.length} pageSize={this.state.pageSize}/>
+                    <Pagination changePage={this.handlePage} currentPage={this.state.currentPage} totalItems={filter.length} pageSize={this.state.pageSize}/>
                 </main></div>
                 </div>
                     
