@@ -16,7 +16,6 @@ const movies = [
     genre: { _id: "5b21ca3eeb7f6fbccd471818", name: "Action" },
     numberInStock: 5,
     dailyRentalRate: 2.5,
-    
   },
   {
     _id: "5b21ca3eeb7f6fbccd471817",
@@ -32,7 +31,6 @@ const movies = [
     genre: { _id: "5b21ca3eeb7f6fbccd471814", name: "Comedy" },
     numberInStock: 7,
     dailyRentalRate: 3.5,
-    
   },
   {
     _id: "5b21ca3eeb7f6fbccd47181a",
@@ -47,28 +45,32 @@ const movies = [
     title: "Wedding Crashers",
     genre: { _id: "5b21ca3eeb7f6fbccd471814", name: "Comedy" },
     numberInStock: 7,
-    dailyRentalRate: 3.5,liked: "true",
+    dailyRentalRate: 3.5,
+    liked: "true",
   },
   {
     _id: "5b21ca3eeb7f6fbccd47181e",
     title: "Gone Girl",
     genre: { _id: "5b21ca3eeb7f6fbccd471820", name: "Thriller" },
     numberInStock: 7,
-    dailyRentalRate: 4.5,liked: "true",
+    dailyRentalRate: 4.5,
+    liked: "true",
   },
   {
     _id: "5b21ca3eeb7f6fbccd47181f",
     title: "The Sixth Sense",
     genre: { _id: "5b21ca3eeb7f6fbccd471820", name: "Thriller" },
     numberInStock: 4,
-    dailyRentalRate: 3.5,liked: "false"
+    dailyRentalRate: 3.5,
+    liked: "false",
   },
   {
     _id: "5b21ca3eeb7f6fbccd471821",
     title: "The Avengers",
     genre: { _id: "5b21ca3eeb7f6fbccd471818", name: "Action" },
     numberInStock: 7,
-    dailyRentalRate: 3.5,liked: "true",
+    dailyRentalRate: 3.5,
+    liked: "true",
   },
 ];
 
@@ -82,13 +84,13 @@ export function getMovie(id) {
 
 export function saveMovie(movie) {
   let movieInDb = movies.find((m) => m._id === movie._id) || {};
-  movieInDb.name = movie.name;
+  movieInDb.title = movie.title;
   movieInDb.genre = genresAPI.genres.find((g) => g._id === movie.genreId);
   movieInDb.numberInStock = movie.numberInStock;
   movieInDb.dailyRentalRate = movie.dailyRentalRate;
 
   if (!movieInDb._id) {
-    movieInDb._id = Date.now();
+    movieInDb._id = Date.now().toString();
     movies.push(movieInDb);
   }
 
